@@ -499,7 +499,22 @@ textarea.contact__input {
 @media (max-width: 1199px) and (min-width: 992px) {
   .contact__form {
     max-width: 580px;
-    padding: 2.5rem;
+    padding: 2rem; /* reduced from 2.5rem */
+    gap: 10px; /* tighter spacing between fields */
+  }
+
+  .contact__input {
+    padding: 12px 14px; /* smaller inputs */
+    font-size: 14px;
+  }
+
+  textarea.contact__input {
+    min-height: 110px; /* reduce textarea height */
+  }
+
+  #statusMsg {
+    margin-top: 6px;
+    font-size: 13px;
   }
 }
 
