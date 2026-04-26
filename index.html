@@ -906,56 +906,13 @@
           • name="contact"               → Identifies form in Netlify dashboard
           • Submissions delivered to mwangifr@gmail.com via Netlify notifications
         -->
-          <form
-          class="contact-form reveal"
-          id="contactForm"
-          action="https://formspree.io/f/mldpwjvo"
-          method="POST"
-          novalidate
-          aria-label="Contact form"
-        >
-          <!-- Honeypot: invisible to real users, traps bots -->
-          <div class="honeypot-field" aria-hidden="true">
-            <label>Leave this blank: <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
-          </div>
-
-          <div class="form-group">
-            <label for="name">Full Name <span class="required-star" aria-label="required">*</span></label>
-            <input type="text" id="name" name="name" placeholder="Your full name" required minlength="2" maxlength="100" autocomplete="name" aria-required="true" />
-            <span class="field-error" id="nameError" role="alert" aria-live="polite"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="email">Email Address <span class="required-star" aria-label="required">*</span></label>
-            <input type="email" id="email" name="email" placeholder="your@email.com" required maxlength="150" autocomplete="email" aria-required="true" />
-            <span class="field-error" id="emailError" role="alert" aria-live="polite"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Phone (optional)</label>
-            <input type="tel" id="phone" name="phone" placeholder="07XX XXX XXX" maxlength="20" autocomplete="tel" />
-            <span class="field-error" id="phoneError" role="alert" aria-live="polite"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="message">Message <span class="required-star" aria-label="required">*</span></label>
-            <textarea id="message" name="message" rows="5" placeholder="How can we pray for you or help you?" required minlength="10" maxlength="2000" aria-required="true"></textarea>
-            <span class="field-error" id="messageError" role="alert" aria-live="polite"></span>
-          </div>
-
-          <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
-            Send Message ✝
-          </button>
-
-          <div class="form-success" id="formSuccess" role="status" aria-live="polite">
-            <i class="fas fa-check-circle" aria-hidden="true"></i>
-            Thank you! Your message has been sent. We'll get back to you soon.
-          </div>
-          <div class="form-error" id="formError" role="alert" aria-live="assertive">
-            <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
-            Something went wrong. Please try again or call us at <a href="tel:+254725812019">0725 812019</a>.
-          </div>
-        </form>
+            <form id="contactForm" action="https://formspree.io/f/mldpwjvo" method="POST" class="contact__form">
+      <input type="text" id="name" name="name" placeholder="Name" class="contact__input" required>
+      <input type="email" id="email" name="email" placeholder="Email" class="contact__input" required>
+      <textarea id="message" name="message" cols="0" rows="10" placeholder="Message" class="contact__input" required></textarea>
+      <input type="submit" value="SUBMIT" class="contact__button button">
+      <p id="statusMsg" style="margin-top:10px; color:green; font-weight:500;"></p>
+    </form>
       </div>
     </div>
   </section>

@@ -144,102 +144,43 @@ function scrollToTop() {
    on the hosted version (Netlify enforces stricter CORS
    origin checks than localhost, so local appeared to work).
 ══════════════════════════════ */
-const contactForm = document.getElementById('contactForm');
+  const form = document.getElementById("contactForm");
+  const statusMsg = document.getElementById("statusMsg");
 
-if (contactForm) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // stop normal submission
 
-  contactForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
 
-    const submitBtn  = document.getElementById('submitBtn');
-    const successBox = document.getElementById('formSuccess');
-    const errorBox   = document.getElementById('formError');
-
-    /* Reset previous feedback */
-    clearFormErrors();
-    successBox.style.display = 'none';
-    errorBox.style.display   = 'none';
-
-    /* ── Collect & trim values ── */
-    const nameEl    = document.getElementById('name');
-    const emailEl   = document.getElementById('email');
-    const phoneEl   = document.getElementById('phone');
-    const messageEl = document.getElementById('message');
-
-    const name    = nameEl.value.trim();
-    const email   = emailEl.value.trim();
-    const phone   = phoneEl ? phoneEl.value.trim() : '';
-    const message = messageEl.value.trim();
-
-    /* ── Client-side validation ── */
-    let hasErrors = false;
-
-    if (name.length < 2) {
-      setFieldError('name', 'Please enter your full name (at least 2 characters).');
-      hasErrors = true;
+    if (name === "" || email === "" || !email.includes("@") || message === "") {
+      statusMsg.style.color = "red";
+      statusMsg.textContent = "Please fill in all fields correctly.";
+      return;
     }
 
-    if (!isValidEmail(email)) {
-      setFieldError('email', 'Please enter a valid email address.');
-      hasErrors = true;
-    }
-
-    if (phone && !isValidPhone(phone)) {
-      setFieldError('phone', 'Please enter a valid phone number, or leave it blank.');
-      hasErrors = true;
-    }
-
-    if (message.length < 10) {
-      setFieldError('message', 'Please write at least 10 characters in your message.');
-      hasErrors = true;
-    }
-
-    /* ── CRITICAL: stop here if any field is invalid ── */
-    if (hasErrors) return;
-
-    /* ── Honeypot check – silently abort if filled by a bot ── */
-    const honeypot = contactForm.querySelector('[name="_gotcha"]');
-    if (honeypot && honeypot.value) return;
-
-    /* ── Loading state ── */
-    submitBtn.disabled    = true;
-    submitBtn.textContent = 'Sending…';
-
-    /* ── POST to Formspree ── */
+    // Send data to Formspree
     try {
-      const res = await fetch(FORMSPREE_URL, {
-        method:  'POST',
-        headers: { 'Accept': 'application/json' },
-        body:    new FormData(contactForm)
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
       });
 
-      let data = {};
-      try { data = await res.json(); } catch (_) { /* non-JSON body is fine */ }
-
-      if (res.ok) {
-        contactForm.reset();
-        successBox.style.display = 'flex';
-        showToast('🙏 Message sent! We will get back to you soon.', 'success');
-        setTimeout(() => { successBox.style.display = 'none'; }, 8000);
+      if (response.ok) {
+        statusMsg.style.color = "green";
+        statusMsg.textContent = "Thank you! Your message has been sent successfully.";
+        form.reset(); // ✅ Clears name, email, and message fields
       } else {
-        /* Surface Formspree's own error message if available */
-        const msg = Array.isArray(data?.errors)
-          ? data.errors.map(err => err.message).join(', ')
-          : 'Submission failed. Please try again.';
-        throw new Error(msg);
+        statusMsg.style.color = "red";
+        statusMsg.textContent = "Oops! Something went wrong. Please try again.";
       }
-
-    } catch (err) {
-      errorBox.style.display = 'block';
-      showToast('Something went wrong. Please try again.', 'error');
-    } finally {
-      submitBtn.disabled    = false;
-      submitBtn.textContent = 'Send Message ✝';
+    } catch (error) {
+      statusMsg.style.color = "red";
+      statusMsg.textContent = "Network error. Please check your connection.";
     }
   });
-
-}
-
 /* ── Field-level error helpers ── */
 function setFieldError(fieldId, message) {
   const field = document.getElementById(fieldId);
