@@ -12,7 +12,7 @@
 /* ══════════════════════════════
    CONSTANTS
 ══════════════════════════════ */
-const FORMSPREE_URL = 'https://formspree.io/f/mldpwjvo';
+const FORMSPREE_URL = 'https://formspree.io/f/xnjlrape';
 
 /* ══════════════════════════════
    HELPERS
