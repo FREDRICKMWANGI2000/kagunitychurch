@@ -898,17 +898,11 @@
           </div>
         </div>
 
-        <!--
-          NETLIFY FORMS INTEGRATION
-          ─────────────────────────
-          • data-netlify="true"          → Netlify detects & handles submissions
-          • netlify-honeypot="bot-field" → Hidden trap field catches bots
-          • name="contact"               → Identifies form in Netlify dashboard
-          • Submissions delivered to mwangifr@gmail.com via Netlify notifications
-        -->
-            <form id="contactForm" action="https://formspree.io/f/mldpwjvo" method="POST" class="contact__form">
+        <!-- FORMS  -->
+    <form id="contactForm" action="https://formspree.io/f/xnjlrape" method="POST" class="contact__form">
       <input type="text" id="name" name="name" placeholder="Name" class="contact__input" required>
       <input type="email" id="email" name="email" placeholder="Email" class="contact__input" required>
+      <input  type="tel"  id="phone" name="phone" placeholder="Phone Number" class="contact__input" required maxlength="10"pattern="[0-9]{10}"inputmode="numeric">
       <textarea id="message" name="message" cols="0" rows="10" placeholder="Message" class="contact__input" required></textarea>
       <input type="submit" value="SUBMIT" class="contact__button button">
       <p id="statusMsg" style="margin-top:10px; color:green; font-weight:500;"></p>

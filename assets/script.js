@@ -18,7 +18,7 @@
 /* ══════════════════════════════
    CONSTANTS
 ══════════════════════════════ */
-const FORMSPREE_URL = 'https://formspree.io/f/mldpwjvo';
+const FORMSPREE_URL = 'https://formspree.io/f/xnjlrape';
 
 /* ══════════════════════════════
    HELPERS
@@ -149,6 +149,20 @@ function scrollToTop() {
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault(); // stop normal submission
+
+    const phoneInput = document.getElementById("phone");
+
+if (phoneInput) {
+  phoneInput.addEventListener("input", function () {
+    // remove anything that's not a number
+    this.value = this.value.replace(/\D/g, "");
+
+    // limit to 10 digits
+    if (this.value.length > 10) {
+      this.value = this.value.slice(0, 10);
+    }
+  });
+}
 
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
