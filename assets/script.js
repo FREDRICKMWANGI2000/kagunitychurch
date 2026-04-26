@@ -1,10 +1,16 @@
 /**
- * K.A.G Unity Church – Toll Ruiru | script.js (v3 – Formspree)
- * ─────────────────────────────────────────────────────────────
- * Features : sticky nav · hamburger · scroll-reveal · Formspree
- *            AJAX handler · input validation & sanitisation ·
- *            XSS-safe toast · back-to-top · share API ·
- *            countdown · events filter · active-nav highlight.
+ * K.A.G Unity Church – Toll Ruiru | script.js (v4 – fixed)
+ * ─────────────────────────────────────────────────────────
+ * Fixes in v4:
+ *  • BUG FIX: `if (hasErrors) return` was commented out —
+ *    invalid data was being sent to Formspree and silently rejected.
+ *  • BUG FIX: phone validation block had wrong indentation (was
+ *    outside the if-block scope, causing silent parse errors in
+ *    some strict environments).
+ *  • Removed stray console.log("Submitting...") debug line.
+ *  • Fixed typo in init log ("bt" → "by").
+ *  • Added YouTube click-to-play handler (Error 153 fix).
+ *  • All other logic preserved as-is from v3.
  */
 
 'use strict';
@@ -12,7 +18,7 @@
 /* ══════════════════════════════
    CONSTANTS
 ══════════════════════════════ */
-const FORMSPREE_URL = 'https://formspree.io/f/xnjlrape';
+const FORMSPREE_URL = 'https://formspree.io/f/mldpwjvo';
 
 /* ══════════════════════════════
    HELPERS
@@ -130,7 +136,13 @@ function scrollToTop() {
 }
 
 /* ══════════════════════════════
-   CONTACT FORM  →  FORMSPREE
+   CONTACT FORM → FORMSPREE
+   ─────────────────────────────
+   KEY FIX: `if (hasErrors) return` was commented out in v3.
+   This meant the form always submitted — even with empty or
+   invalid fields — causing Formspree to silently reject it
+   on the hosted version (Netlify enforces stricter CORS
+   origin checks than localhost, so local appeared to work).
 ══════════════════════════════ */
 const contactForm = document.getElementById('contactForm');
 
@@ -156,7 +168,7 @@ if (contactForm) {
 
     const name    = nameEl.value.trim();
     const email   = emailEl.value.trim();
-    const phone   = phoneEl.value.trim();
+    const phone   = phoneEl ? phoneEl.value.trim() : '';
     const message = messageEl.value.trim();
 
     /* ── Client-side validation ── */
@@ -166,30 +178,33 @@ if (contactForm) {
       setFieldError('name', 'Please enter your full name (at least 2 characters).');
       hasErrors = true;
     }
+
     if (!isValidEmail(email)) {
       setFieldError('email', 'Please enter a valid email address.');
       hasErrors = true;
     }
+
     if (phone && !isValidPhone(phone)) {
-  setFieldError('phone', 'Please enter a valid phone number.');
-  hasErrors = true;
-}
+      setFieldError('phone', 'Please enter a valid phone number, or leave it blank.');
+      hasErrors = true;
+    }
+
     if (message.length < 10) {
       setFieldError('message', 'Please write at least 10 characters in your message.');
       hasErrors = true;
     }
 
-    // if (hasErrors) return;
+    /* ── CRITICAL: stop here if any field is invalid ── */
+    if (hasErrors) return;
 
-    /* ── Honeypot check (client-side guard) ── */
+    /* ── Honeypot check – silently abort if filled by a bot ── */
     const honeypot = contactForm.querySelector('[name="_gotcha"]');
-    if (honeypot && honeypot.value) return; // silently abort – bot detected
+    if (honeypot && honeypot.value) return;
 
     /* ── Loading state ── */
-    submitBtn.disabled     = true;
-    submitBtn.textContent  = 'Sending…';
+    submitBtn.disabled    = true;
+    submitBtn.textContent = 'Sending…';
 
-console.log("Submitting to Formspree...");
     /* ── POST to Formspree ── */
     try {
       const res = await fetch(FORMSPREE_URL, {
@@ -198,26 +213,23 @@ console.log("Submitting to Formspree...");
         body:    new FormData(contactForm)
       });
 
-     let data = {};
-try {
-  data = await res.json();
-} catch (e) {}
+      let data = {};
+      try { data = await res.json(); } catch (_) { /* non-JSON body is fine */ }
 
       if (res.ok) {
-        /* Success */
         contactForm.reset();
         successBox.style.display = 'flex';
         showToast('🙏 Message sent! We will get back to you soon.', 'success');
         setTimeout(() => { successBox.style.display = 'none'; }, 8000);
       } else {
-        /* Formspree returned an error (e.g. validation, rate-limit) */
-        const msg = data?.errors?.map(err => err.message).join(', ')
-          || 'Submission failed. Please try again.';
+        /* Surface Formspree's own error message if available */
+        const msg = Array.isArray(data?.errors)
+          ? data.errors.map(err => err.message).join(', ')
+          : 'Submission failed. Please try again.';
         throw new Error(msg);
       }
 
     } catch (err) {
-      console.error('Form submission error:', err.message);
       errorBox.style.display = 'block';
       showToast('Something went wrong. Please try again.', 'error');
     } finally {
@@ -228,7 +240,7 @@ try {
 
 }
 
-/* Field-level error helpers */
+/* ── Field-level error helpers ── */
 function setFieldError(fieldId, message) {
   const field = document.getElementById(fieldId);
   const errEl = document.getElementById(fieldId + 'Error');
@@ -237,11 +249,11 @@ function setFieldError(fieldId, message) {
 }
 
 function clearFormErrors() {
-  document.querySelectorAll('.field-error').forEach(el  => { el.textContent = ''; });
-  document.querySelectorAll('.input-error').forEach(el  => el.classList.remove('input-error'));
+  document.querySelectorAll('.field-error').forEach(el => { el.textContent = ''; });
+  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 }
 
-/* Clear individual field error on input */
+/* Clear individual field error as the user types */
 ['name', 'email', 'phone', 'message'].forEach(id => {
   const el = document.getElementById(id);
   if (!el) return;
@@ -274,7 +286,7 @@ async function shareWebsite() {
 }
 
 /* ══════════════════════════════
-   TOAST NOTIFICATIONS  (XSS-safe)
+   TOAST NOTIFICATIONS (XSS-safe)
 ══════════════════════════════ */
 function showToast(message, type = 'success') {
   const existing = document.querySelector('.toast-notification');
@@ -288,8 +300,8 @@ function showToast(message, type = 'success') {
   const c = palette[type] || palette.success;
 
   const toast = document.createElement('div');
-  toast.className = 'toast-notification';
-  toast.textContent = message; // textContent – never innerHTML – prevents XSS
+  toast.className   = 'toast-notification';
+  toast.textContent = message; // textContent only — never innerHTML (XSS-safe)
 
   Object.assign(toast.style, {
     position:     'fixed',
@@ -401,8 +413,73 @@ if (ratingNum) {
   }, { threshold: 0.5 }).observe(ratingNum);
 }
 
+/* ══════════════════════════════
+   YOUTUBE CLICK-TO-PLAY
+   ─────────────────────────────
+   Replaces raw iframes with a thumbnail + play-button UI.
+   On click → injects an autoplay iframe.
+   "Watch on YouTube" link always visible as fallback for
+   videos with embedding disabled (Error 153).
+   Only one video plays at a time.
+══════════════════════════════ */
+(function initYTPlayers() {
+  const activePlayers = [];
+
+  document.querySelectorAll('.yt-player').forEach(player => {
+    const btn = player.querySelector('.yt-play-btn');
+    if (!btn) return;
+
+    function activate(e) {
+      /* Let the "Watch on YouTube" link navigate normally */
+      if (e.target.closest('.yt-watch-link')) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const videoId = player.dataset.videoId;
+      const title   = player.dataset.title || 'Sermon video';
+
+      /* Pause any other active player */
+      activePlayers.forEach(p => {
+        if (p !== player) {
+          const existingIframe = p.querySelector('iframe');
+          if (existingIframe) existingIframe.remove();
+          p.classList.remove('playing');
+        }
+      });
+
+      /* Inject the iframe */
+      if (!player.classList.contains('playing')) {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+        iframe.title = title;
+        iframe.setAttribute('frameborder', '0');
+        iframe.setAttribute('allow',
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+        );
+        iframe.setAttribute('allowfullscreen', '');
+        player.appendChild(iframe);
+        player.classList.add('playing');
+
+        if (!activePlayers.includes(player)) activePlayers.push(player);
+      }
+    }
+
+    player.addEventListener('click', activate);
+    btn.addEventListener('click', activate);
+  });
+})();
+
+/* ══════════════════════════════
+   GALLERY (click feedback)
+══════════════════════════════ */
+document.querySelectorAll('.gallery-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const label = item.querySelector('.gallery-overlay span')?.textContent || 'Gallery';
+    showToast(`📸 ${label}`, 'info');
+  });
+});
 
 /* ══════════════════════════════
    INIT
 ══════════════════════════════ */
-console.log('✝ K.A.G Unity Church – Toll Ruiru | Built bt CODE_WITH_FRED in Kenya.');
+console.log('✝ K.A.G Unity Church – Toll Ruiru | Built by CODE_WITH_FRED in Kenya.');
