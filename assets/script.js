@@ -170,16 +170,16 @@ if (contactForm) {
       setFieldError('email', 'Please enter a valid email address.');
       hasErrors = true;
     }
-    if (!isValidPhone(phone)) {
-      setFieldError('phone', 'Please enter a valid phone number, or leave it blank.');
-      hasErrors = true;
-    }
+    if (phone && !isValidPhone(phone)) {
+  setFieldError('phone', 'Please enter a valid phone number.');
+  hasErrors = true;
+}
     if (message.length < 10) {
       setFieldError('message', 'Please write at least 10 characters in your message.');
       hasErrors = true;
     }
 
-    if (hasErrors) return;
+    // if (hasErrors) return;
 
     /* ── Honeypot check (client-side guard) ── */
     const honeypot = contactForm.querySelector('[name="_gotcha"]');
@@ -189,6 +189,7 @@ if (contactForm) {
     submitBtn.disabled     = true;
     submitBtn.textContent  = 'Sending…';
 
+console.log("Submitting to Formspree...");
     /* ── POST to Formspree ── */
     try {
       const res = await fetch(FORMSPREE_URL, {
@@ -197,7 +198,10 @@ if (contactForm) {
         body:    new FormData(contactForm)
       });
 
-      const data = await res.json();
+     let data = {};
+try {
+  data = await res.json();
+} catch (e) {}
 
       if (res.ok) {
         /* Success */
