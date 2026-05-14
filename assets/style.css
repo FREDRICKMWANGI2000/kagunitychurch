@@ -94,7 +94,7 @@ img   { max-width: 100%; display: block; }
 }
 .hero-overlay {
   position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(180deg, rgba(4,19,64,.72) 0%, rgba(10,36,99,.78) 50%, rgba(4,8,30,.88) 100%);
+  background: linear-gradient(180deg, rgba(4, 18, 61, 0.72) 0%, rgba(8, 26, 70, 0.78) 50%, rgba(4,8,30,.88) 100%);
 }
 .hero-cross-pattern {
   position: absolute; inset: 0; z-index: 2; pointer-events: none;
