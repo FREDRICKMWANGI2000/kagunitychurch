@@ -324,7 +324,7 @@ filterBtns.forEach(btn => {
    COUNTDOWN TIMER
 ══════════════════════════════ */
 (function startCountdown() {
-  const target = new Date('2026-05-15T22:00:00+03:00').getTime();
+  const target = new Date('2026-05-22T21:00:00+03:00').getTime();
   const dEl    = document.getElementById('cd-days');
   const hEl    = document.getElementById('cd-hours');
   const mEl    = document.getElementById('cd-mins');
