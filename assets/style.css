@@ -377,7 +377,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   min-height: 100svh;
   display: flex;
   align-items: center;
-  padding: calc(var(--header-h) + clamp(2rem, 5vw, 4.5rem)) 0 clamp(3.5rem, 6vw, 5.5rem);
+  padding: calc(var(--header-h) + clamp(1.5rem, 4vw, 3.5rem)) 0 clamp(2.5rem, 5vw, 4.5rem);
   overflow: hidden;
   isolation: isolate;
   background: var(--navy-950, #05112e);
@@ -426,23 +426,25 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   z-index: 2;
   display: grid;
   grid-template-columns: 1.25fr .75fr;
-  gap: clamp(2rem, 4vw, 3.5rem);
+  gap: clamp(1.75rem, 3.5vw, 3.5rem);
   align-items: center;
+  width: 100%;
 }
 
 .hero .badge {
   display: inline-flex;
   align-items: center;
-  gap: .6rem;
-  font: 700 .85rem var(--disp);
-  letter-spacing: .06em;
-  padding: .5rem 1.15rem;
+  gap: .55rem;
+  font: 700 clamp(.74rem, 2.6vw, .85rem) var(--disp);
+  letter-spacing: .05em;
+  padding: .45rem 1.05rem;
   border: 1px solid rgba(255, 215, 0, .45);
   border-radius: 999px;
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.25rem;
   background: rgba(7, 26, 77, .75);
   backdrop-filter: blur(8px);
   color: var(--gold-bright);
+  max-width: 100%;
 }
 
 .hero .badge i {
@@ -452,6 +454,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   background: var(--gold);
   box-shadow: 0 0 12px var(--gold);
   animation: heroPulse 2s infinite;
+  flex: none;
 }
 
 @keyframes heroPulse {
@@ -460,9 +463,11 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 
 .hl {
   position: relative;
-  font: 800 clamp(3.2rem, 7.8vw, 7.2rem)/.9 var(--disp);
-  letter-spacing: -.04em;
+  font: 800 clamp(2.35rem, 7vw, 6.2rem)/.93 var(--disp);
+  letter-spacing: -.035em;
   text-transform: none;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .hl .row {
@@ -486,7 +491,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 }
 
 .hl .ind {
-  padding-left: .5em;
+  padding-left: .4em;
 }
 
 .sr {
@@ -499,14 +504,14 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 
 .hero .lede {
   max-width: 44ch;
-  margin: 1.8rem 0;
-  font: italic clamp(1.3rem, 2.2vw, 1.55rem)/1.35 var(--serif);
+  margin: 1.35rem 0 1.6rem;
+  font: italic clamp(1.15rem, 2.5vw, 1.5rem)/1.4 var(--serif);
   color: var(--sky);
 }
 
 .hero .acts {
   display: flex;
-  gap: 1.1rem;
+  gap: .85rem;
   flex-wrap: wrap;
   align-items: center;
 }
@@ -514,18 +519,20 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 .hero .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: .6rem;
-  padding: .95rem 1.8rem;
+  padding: .85rem 1.7rem;
   border-radius: 999px;
-  font: 800 .95rem var(--disp);
+  font: 800 .92rem var(--disp);
+  font-family: var(--disp);
   text-decoration: none;
   border: 0;
   cursor: pointer;
-  font-family: 'Courier New', Courier, monospace;
   color: var(--navy);
   background: linear-gradient(120deg, var(--gold), var(--gold-bright));
   box-shadow: 0 4px 18px rgba(255, 215, 0, .35);
   transition: transform .2s var(--ease), box-shadow .3s, background .3s;
+  white-space: nowrap;
 }
 
 .hero .btn:hover {
@@ -539,7 +546,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   border: 1.5px solid var(--gold-line);
   box-shadow: none;
   backdrop-filter: blur(8px);
-  font-family: 'Courier New', Courier, monospace;
+  font-family: var(--disp);
 }
 
 .hero .btn.out:hover {
@@ -549,8 +556,8 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 }
 
 .hero .hint {
-  margin-top: 1.4rem;
-  font-size: .85rem;
+  margin-top: 1.25rem;
+  font-size: clamp(.78rem, 2vw, .85rem);
   opacity: .65;
   color: var(--sky);
 }
@@ -559,13 +566,14 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   position: relative;
   justify-self: center;
   width: min(100%, 420px);
+  margin-inline: auto;
 }
 
 .arch {
   position: relative;
   justify-self: center;
   width: min(100%, 420px);
-  aspect-ratio: 3 / 4.4;
+  aspect-ratio: 3 / 4.2;
   border-radius: 999px 999px 24px 24px;
   overflow: hidden;
   border: 2px solid rgba(255, 215, 0, .45);
@@ -663,16 +671,102 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 .mini strong {
   font: 800 1rem var(--disp);
   color: #fff;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--disp);
 }
 
+/* Tablet & Mobile Responsiveness */
 @media (max-width: 900px) {
+  .hero {
+    min-height: auto;
+    padding-top: calc(var(--header-h) + 1.5rem);
+    padding-bottom: 3.25rem;
+  }
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
+  }
+  .wrapper-arch {
+    width: min(100%, 360px);
+  }
+  .arch {
+    aspect-ratio: 3 / 3.8;
+    max-height: 420px;
   }
   .mini {
-    left: .5rem;
+    position: static;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (hover: none), (max-width: 768px) {
+  .hl .base {
+    color: rgba(255, 255, 255, 0.45);
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.7);
+  }
+  .hl .fill {
+    -webkit-mask-image: radial-gradient(circle 320px at var(--mx) var(--my), #000 60%, rgba(0, 0, 0, 0.35) 100%);
+    mask-image: radial-gradient(circle 320px at var(--mx) var(--my), #000 60%, rgba(0, 0, 0, 0.35) 100%);
+  }
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding-top: calc(var(--header-h) + 1rem);
+    padding-bottom: 2.5rem;
+  }
+  .hero-grid {
+    gap: 2rem;
+  }
+  .hl {
+    font-size: clamp(2rem, 9.8vw, 3.2rem);
+    line-height: 0.98;
+    letter-spacing: -.025em;
+  }
+  .hl .ind {
+    padding-left: .25em;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero .acts {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+  .hero .btn {
+    width: 100%;
+    justify-content: center;
+    padding: .95rem 1.4rem;
+  }
+  .wrapper-arch {
+    width: min(100%, 300px);
+  }
+  .arch {
+    aspect-ratio: 3 / 3.6;
+    max-height: 350px;
+    border-radius: 999px 999px 18px 18px;
+  }
+  .arch .tag {
+    font-size: .95rem;
+    bottom: 1rem;
+  }
+  .mini {
+    padding: .65rem .85rem;
+  }
+  .mini strong {
+    font-size: .92rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .hl {
+    font-size: 1.85rem;
+  }
+  .hero .badge {
+    padding: .4rem .75rem;
+    font-size: .72rem;
   }
 }
 
