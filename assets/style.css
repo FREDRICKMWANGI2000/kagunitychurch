@@ -520,36 +520,6 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   max-width: 100%;
 }
 
-.hero .badge {
-  display: inline-flex;
-  align-items: center;
-  gap: .55rem;
-  font: 700 clamp(.74rem, 2.6vw, .85rem) var(--disp);
-  letter-spacing: .05em;
-  padding: .45rem 1.05rem;
-  border: 1px solid rgba(255, 215, 0, .45);
-  border-radius: 999px;
-  margin-bottom: 1.25rem;
-  background: rgba(7, 26, 77, .75);
-  backdrop-filter: blur(8px);
-  color: var(--gold-bright);
-  max-width: 100%;
-}
-
-.hero .badge i {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 12px var(--gold);
-  animation: heroPulse 2s infinite;
-  flex: none;
-}
-
-@keyframes heroPulse {
-  50% { opacity: .35; }
-}
-
 .hl {
   position: relative;
   font: 800 clamp(2.35rem, 7vw, 6.2rem)/.93 var(--disp);
@@ -600,7 +570,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 
 .hero .acts {
   display: flex;
-  gap: .65rem;
+  gap: .75rem;
   flex-wrap: wrap;
   align-items: center;
   max-width: 100%;
@@ -610,19 +580,21 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: .45rem;
-  padding: .65rem 1.25rem;
+  gap: .5rem;
+  padding: .85rem 1.65rem;
   border-radius: 999px;
-  font: 700 .82rem var(--disp);
-  letter-spacing: .02em;
-  font-family: var(--disp);
+  font-family: var(--font-body);
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
   text-decoration: none;
-  border: 0;
+  border: 1.5px solid transparent;
   cursor: pointer;
   color: var(--navy);
   background: linear-gradient(120deg, var(--gold), var(--gold-bright));
-  box-shadow: 0 3px 12px rgba(255, 215, 0, .3);
-  transition: transform .2s var(--ease), box-shadow .25s, background .25s;
+  box-shadow: 0 4px 18px rgba(255, 215, 0, .35);
+  transition: transform .2s var(--ease), box-shadow .25s, background .25s, border-color .25s;
   white-space: nowrap;
   max-width: 100%;
   box-sizing: border-box;
@@ -630,16 +602,16 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
 
 .hero .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px -2px rgba(255, 215, 0, .5);
+  box-shadow: 0 8px 24px -2px rgba(255, 215, 0, .55);
 }
 
 .hero .btn.out {
-  background: rgba(10, 36, 99, .5);
+  background: rgba(10, 36, 99, .55);
   color: var(--ice);
-  border: 1.5px solid rgba(255, 215, 0, .5);
+  border: 1.5px solid var(--gold-line);
   box-shadow: none;
   backdrop-filter: blur(8px);
-  font-family: var(--disp);
+  font-family: var(--font-body);
 }
 
 .hero .btn.out:hover {
@@ -825,26 +797,31 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
     width: 100%;
   }
   .hero .btn {
-    padding: .55rem 1rem;
-    font-size: .78rem;
+    padding: .58rem 1rem;
+    font-size: .76rem;
+    letter-spacing: .08em;
     flex: 1 1 auto;
-    min-width: 130px;
     text-align: center;
   }
 }
 
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .hero .acts {
-    flex-direction: column;
-    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: .42rem;
     width: 100%;
-    gap: .45rem;
+    align-items: center;
   }
   .hero .btn {
-    width: 100%;
-    justify-content: center;
-    padding: .6rem 1rem;
-    font-size: .8rem;
+    padding: .5rem .75rem;
+    font-size: clamp(.65rem, 2.7vw, .72rem);
+    letter-spacing: .05em;
+    flex: 1 1 0;
+    min-width: 0;
+    text-align: center;
+    white-space: nowrap;
   }
   .wrapper-arch {
     width: min(100%, 300px);
@@ -866,13 +843,18 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 330px) {
   .hl {
     font-size: 1.85rem;
   }
-  .hero .badge {
-    padding: .4rem .75rem;
-    font-size: .72rem;
+  .hero .acts {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .4rem;
+  }
+  .hero .btn {
+    width: 100%;
+    padding: .55rem .75rem;
   }
 }
 
