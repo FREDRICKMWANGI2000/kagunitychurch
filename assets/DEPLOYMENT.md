@@ -142,3 +142,13 @@ After deploying, verify:
 Built by **CODE WITH FRED** — [codewithfred.netlify.app](https://codewithfred.netlify.app/)
 
 For form-related questions: Netlify dashboard → Forms → contact
+
+---
+
+## 6. Redesign notes (v5)
+
+- **Structure is unchanged:** static `index.html` + `assets/style.css` + `assets/script.js`; no build step.
+- `netlify.toml` (repo root) now exists: publish dir `.` plus security/cache headers.
+- Optimised photos live in `assets/img/` (WebP, responsive sizes). Originals remain in `assets/images/`.
+- **Adding events:** edit the `SPECIAL_EVENTS` array at the top of `assets/script.js` (verified, dated events only). Past events hide automatically; the weekly schedule dates itself.
+- **Sermons:** to add one, copy a `.sermon` block in `index.html`, then change the YouTube ID, title and thumbnail (`assets/img/sermon-<id>.webp`).
